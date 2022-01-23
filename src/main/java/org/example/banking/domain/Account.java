@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.FieldDefaults;
 
+import javax.money.MonetaryAmount;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
@@ -23,5 +24,9 @@ public class Account {
 
     public Collection<ADomainEvent> getUncommittedChanges() {
         return uncommittedChanges;
+    }
+
+    public void deposit(MonetaryAmount monetaryAmount) {
+        uncommittedChanges.add(new MoneyDeposittedEvent(id, monetaryAmount));
     }
 }

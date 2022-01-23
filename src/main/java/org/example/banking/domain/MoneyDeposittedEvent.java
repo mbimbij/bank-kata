@@ -6,17 +6,18 @@ import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
+import javax.money.MonetaryAmount;
 import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Getter
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-public class AccountCreatedEvent extends ADomainEvent {
-    UUID customerId;
+public class MoneyDeposittedEvent extends ADomainEvent {
+    MonetaryAmount deposit;
 
-    public AccountCreatedEvent(UUID accountId, UUID customerId) {
+    public MoneyDeposittedEvent(UUID accountId, MonetaryAmount deposit) {
         super(accountId);
-        this.customerId = customerId;
+        this.deposit = deposit;
     }
 }
