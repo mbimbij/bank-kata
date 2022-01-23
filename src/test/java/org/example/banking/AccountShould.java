@@ -1,9 +1,11 @@
 package org.example.banking;
 
+import org.assertj.core.api.SoftAssertions;
 import org.example.banking.domain.Account;
 import org.example.banking.domain.AccountCreatedEvent;
 import org.example.banking.domain.Customer;
 import org.example.banking.domain.MoneyDeposittedEvent;
+import org.example.banking.domain.MoneyWithdrawnEvent;
 import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,6 +48,28 @@ public class AccountShould {
 
         // THEN
         MoneyDeposittedEvent expectedEvent = new MoneyDeposittedEvent(accountId, deposit);
-        assertThat(account.getUncommittedChanges()).contains(expectedEvent);
+        Money expectedBalance = Money.of(10, "EUR");
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(account.getUncommittedChanges()).contains(expectedEvent);
+            softAssertions.assertThat(account.getBalance()).isEqualTo(expectedBalance);
+        });
+    }
+
+    @Test
+    void createMoneyWithdrawnEvent_whenWithdraw() {
+        // GIVEN
+        account.deposit(Money.of(100, "EUR"));
+
+        // WHEN
+        MonetaryAmount withdrawal = Money.of(20, "EUR");
+        account.withdraw(withdrawal);
+
+        // THEN
+        MoneyWithdrawnEvent expectedEvent = new MoneyWithdrawnEvent(accountId, withdrawal);
+        Money expectedBalance = Money.of(80, "EUR");
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(account.getUncommittedChanges()).contains(expectedEvent);
+            softAssertions.assertThat(account.getBalance()).isEqualTo(expectedBalance);
+        });
     }
 }
