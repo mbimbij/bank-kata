@@ -2,6 +2,7 @@ package org.example.banking.domain;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 import org.javamoney.moneta.Money;
 
@@ -18,7 +19,7 @@ public class Account {
     final Collection<ADomainEvent> uncommittedChanges = new ArrayList<>();
     MonetaryAmount balance = Money.of(0, "EUR");
 
-    public Account(UUID id, Customer owner) {
+    public Account(@NonNull UUID id, @NonNull Customer owner) {
         this.id = id;
         this.owner = owner;
         uncommittedChanges.add(new AccountCreatedEvent(id, owner.getId()));
@@ -40,5 +41,19 @@ public class Account {
 
     public MonetaryAmount getBalance() {
         return balance;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void transferOut(UUID destinationAccountId, MonetaryAmount monetaryAmount) {
+        balance = balance.subtract(monetaryAmount);
+        uncommittedChanges.add(new MoneyTransferredOutEvent(id, destinationAccountId, monetaryAmount));
+    }
+
+    public void transferIn(UUID sourceAccountId, MonetaryAmount monetaryAmount) {
+        balance = balance.add(monetaryAmount);
+        uncommittedChanges.add(new MoneyTransferredInEvent(id, sourceAccountId, monetaryAmount));
     }
 }
