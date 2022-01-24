@@ -13,6 +13,7 @@ import org.example.banking.domain.event.MoneyWithdrawnEvent;
 import org.javamoney.moneta.Money;
 
 import javax.money.MonetaryAmount;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
@@ -25,24 +26,24 @@ public class Account {
     final Collection<ADomainEvent> uncommittedChanges = new ArrayList<>();
     MonetaryAmount balance = Money.of(0, "EUR");
 
-    public Account(@NonNull UUID id, @NonNull Customer owner) {
+    public Account(@NonNull UUID id, @NonNull Customer owner, ZonedDateTime timestamp) {
         this.id = id;
         this.owner = owner;
-        uncommittedChanges.add(new AccountCreatedEvent(id, owner.getId()));
+        uncommittedChanges.add(new AccountCreatedEvent(id, owner.getId(), timestamp));
     }
 
     public Collection<ADomainEvent> getUncommittedChanges() {
         return uncommittedChanges;
     }
 
-    public void deposit(MonetaryAmount monetaryAmount) {
+    public void deposit(MonetaryAmount monetaryAmount, ZonedDateTime timestamp) {
         balance = balance.add(monetaryAmount);
-        uncommittedChanges.add(new MoneyDeposittedEvent(id, monetaryAmount));
+        uncommittedChanges.add(new MoneyDeposittedEvent(id, monetaryAmount, timestamp));
     }
 
-    public void withdraw(MonetaryAmount monetaryAmount) {
+    public void withdraw(MonetaryAmount monetaryAmount, ZonedDateTime timestamp) {
         balance = balance.subtract(monetaryAmount);
-        uncommittedChanges.add(new MoneyWithdrawnEvent(id, monetaryAmount));
+        uncommittedChanges.add(new MoneyWithdrawnEvent(id, monetaryAmount, timestamp));
     }
 
     public MonetaryAmount getBalance() {
@@ -53,13 +54,13 @@ public class Account {
         return id;
     }
 
-    public void transferOut(UUID destinationAccountId, MonetaryAmount monetaryAmount) {
+    public void transferOut(UUID destinationAccountId, MonetaryAmount monetaryAmount, ZonedDateTime timestamp) {
         balance = balance.subtract(monetaryAmount);
-        uncommittedChanges.add(new MoneyTransferredOutEvent(id, destinationAccountId, monetaryAmount));
+        uncommittedChanges.add(new MoneyTransferredOutEvent(id, destinationAccountId, monetaryAmount, timestamp));
     }
 
-    public void transferIn(UUID sourceAccountId, MonetaryAmount monetaryAmount) {
+    public void transferIn(UUID sourceAccountId, MonetaryAmount monetaryAmount, ZonedDateTime timestamp) {
         balance = balance.add(monetaryAmount);
-        uncommittedChanges.add(new MoneyTransferredInEvent(id, sourceAccountId, monetaryAmount));
+        uncommittedChanges.add(new MoneyTransferredInEvent(id, sourceAccountId, monetaryAmount, timestamp));
     }
 }

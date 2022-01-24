@@ -6,6 +6,7 @@ import org.example.banking.domain.event.MoneyTransferredOutEvent;
 import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.Test;
 
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 class TransferServiceTest {
@@ -14,22 +15,25 @@ class TransferServiceTest {
         // GIVEN
         UUID sourceAccountId = UUID.randomUUID();
         UUID destinationAccountId = UUID.randomUUID();
-        Account source = new Account(sourceAccountId, new Customer(UUID.randomUUID(), "customer"));
-        Account destination = new Account(destinationAccountId, new Customer(UUID.randomUUID(), "other customer"));
 
-        source.deposit(Money.of(100, "EUR"));
+        Account source = new Account(sourceAccountId, new Customer(UUID.randomUUID(), "customer"), ZonedDateTime.now());
+        Account destination = new Account(destinationAccountId, new Customer(UUID.randomUUID(), "other customer"), ZonedDateTime.now());
+
+        source.deposit(Money.of(100, "EUR"), ZonedDateTime.now());
 
         TransferService transferService = new TransferService();
 
+        ZonedDateTime moneyTransferTimestamp = ZonedDateTime.now();
+
         // WHEN
         Money transferAmount = Money.of(30, "EUR");
-        transferService.transfer(source, destination, transferAmount);
+        transferService.transfer(source, destination, transferAmount, moneyTransferTimestamp);
 
         // THEN
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(source.getUncommittedChanges()).contains(new MoneyTransferredOutEvent(sourceAccountId, destinationAccountId, transferAmount));
+            softAssertions.assertThat(source.getUncommittedChanges()).contains(new MoneyTransferredOutEvent(sourceAccountId, destinationAccountId, transferAmount, moneyTransferTimestamp));
             softAssertions.assertThat(source.getBalance()).isEqualTo(Money.of(70, "EUR"));
-            softAssertions.assertThat(destination.getUncommittedChanges()).contains(new MoneyTransferredInEvent(destinationAccountId, sourceAccountId, transferAmount));
+            softAssertions.assertThat(destination.getUncommittedChanges()).contains(new MoneyTransferredInEvent(destinationAccountId, sourceAccountId, transferAmount, moneyTransferTimestamp));
             softAssertions.assertThat(destination.getBalance()).isEqualTo(Money.of(30, "EUR"));
         });
     }

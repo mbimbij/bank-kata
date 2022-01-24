@@ -1,10 +1,14 @@
 package org.example.banking.domain.event;
 
+import org.example.banking.domain.readmodel.AccountStatementsReadRepo;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 class AEventHandlerTest {
 
@@ -61,7 +65,7 @@ class AEventHandlerTest {
 
     private static class Event1 extends ADomainEvent {
         public Event1() {
-            super(UUID.randomUUID());
+            super(UUID.randomUUID(), ZonedDateTime.now());
         }
     }
 
@@ -70,11 +74,15 @@ class AEventHandlerTest {
 
     private static class Event2 extends ADomainEvent {
         public Event2() {
-            super(UUID.randomUUID());
+            super(UUID.randomUUID(), ZonedDateTime.now());
         }
     }
 
     private static class Event1Handler extends AEventHandler<Event1>{
+        private Event1Handler() {
+            super(mock(AccountStatementsReadRepo.class));
+        }
+
         @Override
         public void handle(Event1 domainEvent) {
 
@@ -82,6 +90,10 @@ class AEventHandlerTest {
     }
 
     private static class SubEvent1Handler extends AEventHandler<SubEvent1>{
+        private SubEvent1Handler() {
+            super(mock(AccountStatementsReadRepo.class));
+        }
+
         @Override
         public void handle(SubEvent1 domainEvent) {
 

@@ -7,6 +7,7 @@ import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 import javax.money.MonetaryAmount;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
@@ -17,8 +18,8 @@ public class MoneyTransferredOutEvent extends ADomainEvent {
     UUID destinationAccountId;
     final MonetaryAmount transferAmount;
 
-    public MoneyTransferredOutEvent(UUID accountId, UUID destinationAccountId, MonetaryAmount transferAmount) {
-        super(accountId);
+    public MoneyTransferredOutEvent(UUID accountId, UUID destinationAccountId, MonetaryAmount transferAmount, ZonedDateTime timestamp) {
+        super(accountId, timestamp);
         this.destinationAccountId = destinationAccountId;
         this.transferAmount = transferAmount;
     }

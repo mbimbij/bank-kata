@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.money.MonetaryAmount;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,17 +17,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class AccountTest {
 
     private final String customerName = "cust";
+    private final ZonedDateTime creationTimestamp = ZonedDateTime.now();
     private UUID customerId;
-    private Customer customer;
     private UUID accountId;
     private Account account;
 
     @BeforeEach
     void setUp() {
         customerId = UUID.randomUUID();
-        customer = new Customer(customerId, customerName);
         accountId = UUID.randomUUID();
-        account = new Account(accountId, customer);
+        account = new Account(accountId, new Customer(customerId, customerName), creationTimestamp);
     }
 
     @Test
@@ -34,18 +34,21 @@ public class AccountTest {
         // WHEN account created in setup
 
         // THEN
-        AccountCreatedEvent expectedEvent = new AccountCreatedEvent(accountId, customerId);
+        AccountCreatedEvent expectedEvent = new AccountCreatedEvent(accountId, customerId, creationTimestamp);
         assertThat(account.getUncommittedChanges()).contains(expectedEvent);
     }
 
     @Test
     void createMoneyDeposittedEvent_whenDeposit() {
+        // GIVEN
+        MonetaryAmount depositAmount = Money.of(10, "EUR");
+        ZonedDateTime depositTimestamp = ZonedDateTime.now();
+
         // WHEN
-        MonetaryAmount deposit = Money.of(10, "EUR");
-        account.deposit(deposit);
+        account.deposit(depositAmount, depositTimestamp);
 
         // THEN
-        MoneyDeposittedEvent expectedEvent = new MoneyDeposittedEvent(accountId, deposit);
+        MoneyDeposittedEvent expectedEvent = new MoneyDeposittedEvent(accountId, depositAmount, depositTimestamp);
         Money expectedBalance = Money.of(10, "EUR");
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(account.getUncommittedChanges()).contains(expectedEvent);
@@ -56,14 +59,16 @@ public class AccountTest {
     @Test
     void createMoneyWithdrawnEvent_whenWithdraw() {
         // GIVEN
-        account.deposit(Money.of(100, "EUR"));
+        account.deposit(Money.of(100, "EUR"), ZonedDateTime.now());
+
+        ZonedDateTime withdrawalTimestamp = ZonedDateTime.now();
+        MonetaryAmount withdrawalAmount = Money.of(20, "EUR");
 
         // WHEN
-        MonetaryAmount withdrawal = Money.of(20, "EUR");
-        account.withdraw(withdrawal);
+        account.withdraw(withdrawalAmount, withdrawalTimestamp);
 
         // THEN
-        MoneyWithdrawnEvent expectedEvent = new MoneyWithdrawnEvent(accountId, withdrawal);
+        MoneyWithdrawnEvent expectedEvent = new MoneyWithdrawnEvent(accountId, withdrawalAmount, withdrawalTimestamp);
         Money expectedBalance = Money.of(80, "EUR");
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(account.getUncommittedChanges()).contains(expectedEvent);

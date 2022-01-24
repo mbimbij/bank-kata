@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
@@ -15,8 +16,8 @@ import java.util.UUID;
 public class AccountCreatedEvent extends ADomainEvent {
     UUID customerId;
 
-    public AccountCreatedEvent(UUID accountId, UUID customerId) {
-        super(accountId);
+    public AccountCreatedEvent(UUID accountId, UUID customerId, ZonedDateTime timestamp) {
+        super(accountId, timestamp);
         this.customerId = customerId;
     }
 }

@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @EqualsAndHashCode
@@ -13,4 +14,5 @@ import java.util.UUID;
 @AllArgsConstructor
 public abstract class ADomainEvent {
     private final UUID accountId;
+    private final ZonedDateTime timestamp;
 }
