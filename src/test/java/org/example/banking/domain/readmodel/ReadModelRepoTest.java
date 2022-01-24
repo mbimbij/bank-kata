@@ -15,7 +15,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ReadModelRepoShouldTest {
+class ReadModelRepoTest {
     @Test
     void getAccountStatement() {
         // GIVEN

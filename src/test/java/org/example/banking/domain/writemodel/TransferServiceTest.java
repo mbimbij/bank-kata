@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
-class TransferServiceShouldTest {
+class TransferServiceTest {
     @Test
     void create2Events_transferIn_transferOut_whenTransferMoney() {
         // GIVEN
