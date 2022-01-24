@@ -14,12 +14,12 @@ import java.util.UUID;
 @Getter
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class MoneyTransferredInEvent extends ADomainEvent {
-    UUID destinationAccountId;
+    UUID sourceAccountId;
     final MonetaryAmount transferAmount;
 
-    public MoneyTransferredInEvent(UUID accountId, UUID destinationAccountId, MonetaryAmount transferAmount) {
-        super(destinationAccountId);
-        this.destinationAccountId = accountId;
+    public MoneyTransferredInEvent(UUID accountId, UUID sourceAccountId, MonetaryAmount transferAmount) {
+        super(accountId);
+        this.sourceAccountId = sourceAccountId;
         this.transferAmount = transferAmount;
     }
 }
