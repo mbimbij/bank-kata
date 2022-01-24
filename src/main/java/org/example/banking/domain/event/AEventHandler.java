@@ -1,6 +1,7 @@
 package org.example.banking.domain.event;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.Objects;
 
 public abstract class AEventHandler<T extends ADomainEvent> {
     private Class<T> handledEventType;
@@ -12,7 +13,7 @@ public abstract class AEventHandler<T extends ADomainEvent> {
 
     public abstract void handle(T domainEvent);
 
-    public boolean isHandled(ADomainEvent domainEvent){
-        return handledEventType.isAssignableFrom(domainEvent.getClass());
+    public boolean isHandled(ADomainEvent domainEvent) {
+        return Objects.equals(handledEventType, domainEvent.getClass());
     }
 }

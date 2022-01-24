@@ -34,6 +34,31 @@ class AEventHandlerTestShould {
         assertThat(handled).isFalse();
     }
 
+    @Test
+    void notHandleEventsOfSubType() {
+        // GIVEN
+        SubEvent1 event = new SubEvent1();
+
+        // WHEN
+        boolean handled = event1Handler.isHandled(event);
+
+        // THEN
+        assertThat(handled).isFalse();
+    }
+
+    @Test
+    void notHandleEventsOfSuperType() {
+        // GIVEN
+        Event1 event = new Event1();
+        SubEvent1Handler subEvent1Handler = new SubEvent1Handler();
+
+        // WHEN
+        boolean handled = subEvent1Handler.isHandled(event);
+
+        // THEN
+        assertThat(handled).isFalse();
+    }
+
     private static class Event1 extends ADomainEvent {
         public Event1() {
             super(UUID.randomUUID());
