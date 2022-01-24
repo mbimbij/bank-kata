@@ -1,4 +1,4 @@
-package org.example.banking.domain;
+package org.example.banking.domain.writemodel;
 
 import javax.money.MonetaryAmount;
 

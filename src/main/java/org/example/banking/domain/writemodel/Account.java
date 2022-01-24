@@ -1,9 +1,15 @@
-package org.example.banking.domain;
+package org.example.banking.domain.writemodel;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
+import org.example.banking.domain.event.ADomainEvent;
+import org.example.banking.domain.event.AccountCreatedEvent;
+import org.example.banking.domain.event.MoneyDeposittedEvent;
+import org.example.banking.domain.event.MoneyTransferredInEvent;
+import org.example.banking.domain.event.MoneyTransferredOutEvent;
+import org.example.banking.domain.event.MoneyWithdrawnEvent;
 import org.javamoney.moneta.Money;
 
 import javax.money.MonetaryAmount;

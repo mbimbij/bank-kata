@@ -1,12 +1,14 @@
-package org.example.banking.domain;
+package org.example.banking.domain.writemodel;
 
 import org.assertj.core.api.SoftAssertions;
+import org.example.banking.domain.event.MoneyTransferredInEvent;
+import org.example.banking.domain.event.MoneyTransferredOutEvent;
 import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
-class TransferServiceShould {
+class TransferServiceShouldTest {
     @Test
     void create2Events_transferIn_transferOut_whenTransferMoney() {
         // GIVEN

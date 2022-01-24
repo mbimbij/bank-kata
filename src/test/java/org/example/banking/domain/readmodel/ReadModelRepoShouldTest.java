@@ -1,11 +1,10 @@
 package org.example.banking.domain.readmodel;
 
-import org.assertj.core.api.Assertions;
 import org.example.banking.adapter.out.InMemoryReadModelRepo;
-import org.example.banking.domain.AccountCreatedEvent;
-import org.example.banking.domain.DomainEventPublisher;
-import org.example.banking.domain.MoneyDeposittedEvent;
-import org.example.banking.domain.MoneyWithdrawnEvent;
+import org.example.banking.domain.event.AccountCreatedEvent;
+import org.example.banking.domain.event.DomainEventPublisher;
+import org.example.banking.domain.event.MoneyDeposittedEvent;
+import org.example.banking.domain.event.MoneyWithdrawnEvent;
 import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +15,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ReadModelRepoShould {
+class ReadModelRepoShouldTest {
     @Test
     void getAccountStatement() {
         // GIVEN

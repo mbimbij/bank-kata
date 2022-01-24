@@ -1,11 +1,9 @@
-package org.example.banking;
+package org.example.banking.domain.writemodel;
 
 import org.assertj.core.api.SoftAssertions;
-import org.example.banking.domain.Account;
-import org.example.banking.domain.AccountCreatedEvent;
-import org.example.banking.domain.Customer;
-import org.example.banking.domain.MoneyDeposittedEvent;
-import org.example.banking.domain.MoneyWithdrawnEvent;
+import org.example.banking.domain.event.AccountCreatedEvent;
+import org.example.banking.domain.event.MoneyDeposittedEvent;
+import org.example.banking.domain.event.MoneyWithdrawnEvent;
 import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +13,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AccountShould {
+public class AccountShouldTest {
 
     private final String customerName = "cust";
     private UUID customerId;
