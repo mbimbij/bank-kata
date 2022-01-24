@@ -1,6 +1,5 @@
 package org.example.banking.domain.event;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -8,17 +7,31 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class AEventHandlerTestShould {
+
+    private final Event1Handler event1Handler = new Event1Handler();
+
     @Test
     void handleEventsOfSameType() {
         // GIVEN
-        Event1Handler event1Handler = new Event1Handler();
-        Event1 event1 = new Event1();
+        Event1 event = new Event1();
 
         // WHEN
-        boolean handled = event1Handler.isHandled(event1);
+        boolean handled = event1Handler.isHandled(event);
 
         // THEN
         assertThat(handled).isTrue();
+    }
+
+    @Test
+    void notHandleEventsOfCompletelyDifferentType() {
+        // GIVEN
+        Event2 event = new Event2();
+
+        // WHEN
+        boolean handled = event1Handler.isHandled(event);
+
+        // THEN
+        assertThat(handled).isFalse();
     }
 
     private static class Event1 extends ADomainEvent {
