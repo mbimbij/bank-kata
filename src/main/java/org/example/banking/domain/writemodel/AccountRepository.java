@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.banking.domain.event.ADomainEvent;
 
 import java.util.Collection;
+import java.util.Optional;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 public class AccountRepository {
@@ -14,5 +16,11 @@ public class AccountRepository {
     Collection<ADomainEvent> uncommittedChanges = newAccount.getUncommittedChanges();
     eventStore.save(uncommittedChanges);
     domainEventPublisher.publish(uncommittedChanges);
+  }
+
+  public Account getById(UUID accountId) {
+    return Optional.of(eventStore.getById(accountId))
+                   .map(Account::new)
+                   .orElseThrow(() -> new AccountDoesNotExistException(accountId));
   }
 }

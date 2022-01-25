@@ -18,15 +18,15 @@ class AccountTest {
 
     private final String customerName = "cust";
     private final ZonedDateTime creationTimestamp = ZonedDateTime.now();
-    private UUID customerId;
     private UUID accountId;
     private Account account;
+    protected Customer customer;
 
     @BeforeEach
     void setUp() {
-        customerId = UUID.randomUUID();
         accountId = UUID.randomUUID();
-        account = new Account(accountId, new Customer(customerId, customerName), creationTimestamp);
+        customer = new Customer(UUID.randomUUID(), customerName);
+        account = new Account(accountId, customer, creationTimestamp);
     }
 
     @Test
@@ -34,7 +34,7 @@ class AccountTest {
         // WHEN account created in setup
 
         // THEN
-        AccountCreatedEvent expectedEvent = new AccountCreatedEvent(accountId, customerId, creationTimestamp);
+        AccountCreatedEvent expectedEvent = new AccountCreatedEvent(accountId, customer, creationTimestamp);
         assertThat(account.getUncommittedChanges()).contains(expectedEvent);
     }
 

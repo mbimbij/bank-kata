@@ -4,9 +4,8 @@ import lombok.Getter;
 import org.example.banking.domain.event.ADomainEvent;
 import org.example.banking.domain.writemodel.EventStore;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 public class InMemoryEventStore implements EventStore {
@@ -15,5 +14,12 @@ public class InMemoryEventStore implements EventStore {
   @Override
   public void save(Collection<ADomainEvent> domainEvents) {
     events.addAll(domainEvents);
+  }
+
+  @Override
+  public Collection<ADomainEvent> getById(UUID accountId) {
+    return events.stream()
+                 .filter(aDomainEvent -> Objects.equals(aDomainEvent.getAccountId(), accountId))
+                 .collect(Collectors.toList());
   }
 }

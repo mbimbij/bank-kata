@@ -2,6 +2,7 @@ package org.example.banking.domain.readmodel;
 
 import org.example.banking.adapter.out.InMemoryAccountStatementsReadRepo;
 import org.example.banking.domain.event.*;
+import org.example.banking.domain.writemodel.Customer;
 import org.example.banking.domain.writemodel.DomainEventPublisher;
 import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.Test;
@@ -36,8 +37,8 @@ class AccountStatementsReadRepoTest {
     UUID accountId1 = UUID.randomUUID();
     UUID accountId2 = UUID.randomUUID();
     domainEventPublisher.publish(List.of(
-        new AccountCreatedEvent(accountId1, UUID.randomUUID(), ZonedDateTime.now()),
-        new AccountCreatedEvent(accountId2, UUID.randomUUID(), ZonedDateTime.now()),
+        new AccountCreatedEvent(accountId1, new Customer(UUID.randomUUID(), "some cutomer"), ZonedDateTime.now()),
+        new AccountCreatedEvent(accountId2, new Customer(UUID.randomUUID(), "some other cutomer"), ZonedDateTime.now()),
         new MoneyDeposittedEvent(accountId1, Money.of(1000, "EUR"), january10.atStartOfDay(ZoneId.systemDefault())),
         new MoneyDeposittedEvent(accountId1, Money.of(2000, "EUR"), january13.atStartOfDay(ZoneId.systemDefault())),
         new MoneyWithdrawnEvent(accountId1, Money.of(500, "EUR"), january14.atStartOfDay(ZoneId.systemDefault())),

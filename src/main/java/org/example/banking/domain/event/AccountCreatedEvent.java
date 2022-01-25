@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
+import org.example.banking.domain.writemodel.Customer;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
@@ -14,10 +15,10 @@ import java.util.UUID;
 @Getter
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class AccountCreatedEvent extends ADomainEvent {
-    UUID customerId;
+    Customer customer;
 
-    public AccountCreatedEvent(UUID accountId, UUID customerId, ZonedDateTime timestamp) {
+    public AccountCreatedEvent(UUID accountId, Customer customer, ZonedDateTime timestamp) {
         super(accountId, timestamp);
-        this.customerId = customerId;
+        this.customer = customer;
     }
 }
