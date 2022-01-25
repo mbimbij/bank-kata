@@ -1,7 +1,7 @@
 package org.example.banking.adapter.out;
 
 import org.example.banking.domain.event.*;
-import org.example.banking.domain.readmodel.AccountDoesNotExistException;
+import org.example.banking.domain.readmodel.AccountReadModelDoesNotExistException;
 import org.example.banking.domain.readmodel.AccountStatementLineWithoutBalance;
 import org.example.banking.domain.readmodel.AccountStatements;
 import org.example.banking.domain.readmodel.AccountStatementsReadRepo;
@@ -17,7 +17,7 @@ public class InMemoryAccountStatementsReadRepo implements AccountStatementsReadR
   @Override
   public AccountStatements getAccountStatements(UUID accountId) {
     return Optional.ofNullable(accountStatementsMap.get(accountId))
-        .orElseThrow(() -> new AccountDoesNotExistException(accountId));
+        .orElseThrow(() -> new AccountReadModelDoesNotExistException(accountId));
   }
 
   @Override

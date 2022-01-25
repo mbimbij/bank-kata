@@ -2,6 +2,7 @@ package org.example.banking.domain.readmodel;
 
 import org.example.banking.adapter.out.InMemoryAccountStatementsReadRepo;
 import org.example.banking.domain.event.*;
+import org.example.banking.domain.writemodel.DomainEventPublisher;
 import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.Test;
 

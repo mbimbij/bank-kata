@@ -14,7 +14,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AccountTest {
+class AccountTest {
 
     private final String customerName = "cust";
     private final ZonedDateTime creationTimestamp = ZonedDateTime.now();
