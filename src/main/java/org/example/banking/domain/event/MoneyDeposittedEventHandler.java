@@ -9,6 +9,6 @@ public class MoneyDeposittedEventHandler extends AEventHandler<MoneyDeposittedEv
 
     @Override
     public void handle(MoneyDeposittedEvent domainEvent) {
-
+        readRepo.handle(domainEvent);
     }
 }

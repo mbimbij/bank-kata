@@ -25,7 +25,7 @@ public class AccountStatementLineWithoutBalance {
         if (isCreditLine()) {
             return AccountStatementLineWithBalance.createCreditLineWithBalance(date, credit, lastAmount);
         } else if (isDebitLine()) {
-            return AccountStatementLineWithBalance.createCreditLineWithBalance(date, debit, lastAmount);
+            return AccountStatementLineWithBalance.createDebitLineWithBalance(date, debit, lastAmount);
         }
         throw new IllegalStateException("line is neither a credit or a debit line: " + this);
     }

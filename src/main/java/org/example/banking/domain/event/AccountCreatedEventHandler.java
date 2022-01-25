@@ -9,6 +9,6 @@ public class AccountCreatedEventHandler extends AEventHandler<AccountCreatedEven
 
     @Override
     public void handle(AccountCreatedEvent domainEvent) {
-
+        readRepo.handle(domainEvent);
     }
 }

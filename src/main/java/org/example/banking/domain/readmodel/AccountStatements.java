@@ -1,12 +1,15 @@
 package org.example.banking.domain.readmodel;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.javamoney.moneta.Money;
 
 import javax.money.MonetaryAmount;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
+@EqualsAndHashCode
+@ToString
 public class AccountStatements {
     MonetaryAmount currentBalance = Money.of(0, "EUR");
     private final List<AccountStatementLineWithBalance> statementLinesWithBalance = new ArrayList<>();
@@ -14,20 +17,10 @@ public class AccountStatements {
     public AccountStatements() {
     }
 
-    public static AccountStatements fromStatementLinesWithBalance(List<AccountStatementLineWithBalance> statementLineWithBalances) {
+    public static AccountStatements fromStatementLinesWithBalance(MonetaryAmount balance, List<AccountStatementLineWithBalance> statementLineWithBalances) {
         AccountStatements accountStatements = new AccountStatements();
-        if (statementLineWithBalances.isEmpty()) {
-            return accountStatements;
-        }
-
+        accountStatements.currentBalance = balance;
         accountStatements.statementLinesWithBalance.addAll(statementLineWithBalances);
-        accountStatements.currentBalance = statementLineWithBalances.get(statementLineWithBalances.size() - 1).getBalance();
-        return accountStatements;
-    }
-
-    public static AccountStatements fromStatementLinesWithoutBalance(Collection<AccountStatementLineWithoutBalance> statementLineWithoutBalances) {
-        AccountStatements accountStatements = new AccountStatements();
-        statementLineWithoutBalances.forEach(accountStatements::handle);
         return accountStatements;
     }
 
@@ -37,7 +30,7 @@ public class AccountStatements {
 
     public void handle(AccountStatementLineWithoutBalance statementLine) {
         AccountStatementLineWithBalance newStatementLineWithBalance = statementLine.withBalance(currentBalance);
-        statementLinesWithBalance.add(newStatementLineWithBalance);
+        statementLinesWithBalance.add(0, newStatementLineWithBalance);
         currentBalance = newStatementLineWithBalance.getBalance();
     }
 }
