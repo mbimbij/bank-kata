@@ -11,5 +11,7 @@ public class DepositMoneyCommandHandler extends ACommandHandler<DepositMoneyComm
   @Override
   public void handle(DepositMoneyCommand domainEvent) {
     Account account = accountRepository.getById(domainEvent.getAccountId());
+    account.deposit(domainEvent.getDepositAmount(),domainEvent.getTimestamp());
+    accountRepository.save(account);
   }
 }
