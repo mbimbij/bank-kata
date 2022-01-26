@@ -55,22 +55,33 @@ public class ApplicationFacadeTest {
     @Test
     void applicationShouldReturnCorrectAccountStatement_whenMultipleOperationsPerformed() {
         // GIVEN
+        UUID otherCustomerId = UUID.randomUUID();
+        UUID otherAccountId = UUID.randomUUID();
+        applicationFacade.createCustomer(otherCustomerId, "other customer");
+        applicationFacade.createAccount(new CreateAccountCommand(otherAccountId, otherCustomerId, creationTimestamp));
+
         ZonedDateTime depositTimestamp = creationTimestamp.plusDays(1);
         ZonedDateTime withdrawalTimestamp = creationTimestamp.plusDays(2);
-        Money eur1000 = Money.of(1000, "EUR");
-        Money eur200 = Money.of(200, "EUR");
-        applicationFacade.deposit(new DepositMoneyCommand(accountId, eur1000, depositTimestamp));
-        applicationFacade.withdraw(new WithdrawMoneyCommand(accountId, eur200, withdrawalTimestamp));
+        ZonedDateTime transferTimestamp = creationTimestamp.plusDays(3);
+
+        Money depostiAmount = Money.of(1000, "EUR");
+        Money withdrawalAmount = Money.of(200, "EUR");
+        Money transferAmount = Money.of(300, "EUR");
+
+        applicationFacade.deposit(new DepositMoneyCommand(accountId, depostiAmount, depositTimestamp));
+        applicationFacade.withdraw(new WithdrawMoneyCommand(accountId, withdrawalAmount, withdrawalTimestamp));
+        applicationFacade.tranfer(new TransferMoneyCommand(accountId, otherAccountId, transferAmount, transferTimestamp));
 
         // WHEN
         AccountStatements accountStatements = applicationFacade.getAccountStatements(accountId);
 
         // THEN
         AccountStatements expectedAccountStatements = AccountStatements.fromStatementLinesWithBalance(
-                Money.of(800, "EUR"),
+                Money.of(500, "EUR"),
                 List.of(
-                        new AccountStatementLineWithBalance(withdrawalTimestamp.toLocalDate(), null, eur200, Money.of(800, "EUR")),
-                        new AccountStatementLineWithBalance(depositTimestamp.toLocalDate(), eur1000, null, eur1000)
+                        new AccountStatementLineWithBalance(transferTimestamp.toLocalDate(), null, transferAmount, Money.of(500, "EUR")),
+                        new AccountStatementLineWithBalance(withdrawalTimestamp.toLocalDate(), null, withdrawalAmount, Money.of(800, "EUR")),
+                        new AccountStatementLineWithBalance(depositTimestamp.toLocalDate(), depostiAmount, null, depostiAmount)
                 ));
         assertThat(accountStatements).usingRecursiveComparison().isEqualTo(expectedAccountStatements);
     }

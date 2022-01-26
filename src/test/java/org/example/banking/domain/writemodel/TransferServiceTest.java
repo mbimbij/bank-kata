@@ -21,13 +21,11 @@ class TransferServiceTest {
 
         source.deposit(Money.of(100, "EUR"), ZonedDateTime.now());
 
-        TransferService transferService = new TransferService();
-
         ZonedDateTime moneyTransferTimestamp = ZonedDateTime.now();
 
         // WHEN
         Money transferAmount = Money.of(30, "EUR");
-        transferService.transfer(source, destination, transferAmount, moneyTransferTimestamp);
+        TransferService.transfer(source, destination, transferAmount, moneyTransferTimestamp);
 
         // THEN
         SoftAssertions.assertSoftly(softAssertions -> {

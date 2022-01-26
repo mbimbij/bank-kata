@@ -40,6 +40,10 @@ public class ApplicationFacade {
         commandBus.send(command);
     }
 
+    public void tranfer(TransferMoneyCommand command) {
+        commandBus.send(command);
+    }
+
     public static ApplicationFacade inMemoryApplication() {
         InMemoryAccountStatementsReadRepo readRepo = new InMemoryAccountStatementsReadRepo();
 
@@ -59,6 +63,7 @@ public class ApplicationFacade {
         commandBus.register(new CreateAccountCommandHandler(customerRepository, accountRepository));
         commandBus.register(new DepositMoneyCommandHandler(accountRepository));
         commandBus.register(new WithdrawMoneyCommandHandler(accountRepository));
+        commandBus.register(new TransferMoneyCommandHandler(accountRepository));
 
         return new ApplicationFacade(readRepo, commandBus);
     }
