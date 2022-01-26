@@ -14,7 +14,7 @@ import java.util.UUID;
 public class WithdrawMoneyCommand extends ACommand {
     private MonetaryAmount monetaryAmount;
 
-    public WithdrawMoneyCommand(UUID accountId, ZonedDateTime timestamp, MonetaryAmount monetaryAmount) {
+    public WithdrawMoneyCommand(UUID accountId, MonetaryAmount monetaryAmount, ZonedDateTime timestamp) {
         super(accountId, timestamp);
         this.monetaryAmount = monetaryAmount;
     }

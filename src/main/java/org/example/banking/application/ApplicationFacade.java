@@ -36,6 +36,10 @@ public class ApplicationFacade {
         commandBus.send(command);
     }
 
+    public void withdraw(WithdrawMoneyCommand command) {
+        commandBus.send(command);
+    }
+
     public static ApplicationFacade inMemoryApplication() {
         InMemoryAccountStatementsReadRepo readRepo = new InMemoryAccountStatementsReadRepo();
 
