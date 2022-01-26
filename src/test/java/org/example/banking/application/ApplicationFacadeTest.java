@@ -1,11 +1,14 @@
 package org.example.banking.application;
 
+import org.example.banking.domain.readmodel.AccountStatementLineWithBalance;
 import org.example.banking.domain.readmodel.AccountStatements;
 import org.example.banking.domain.writemodel.AccountDoesNotExistException;
+import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -46,6 +49,25 @@ public class ApplicationFacadeTest {
 
         // THEN
         AccountStatements expectedAccountStatements = new AccountStatements();
+        assertThat(accountStatements).isEqualTo(expectedAccountStatements);
+    }
+
+    @Test
+    void applicationShouldReturnCorrectAccountStatement_whenDeposit() {
+        // GIVEN
+        ZonedDateTime depositTimestamp = creationTimestamp.plusDays(1);
+        Money eur1000 = Money.of(1000, "EUR");
+        applicationFacade.deposit(new DepositMoneyCommand(accountId, eur1000, depositTimestamp));
+
+        // WHEN
+        AccountStatements accountStatements = applicationFacade.getAccountStatements(accountId);
+
+        // THEN
+        AccountStatements expectedAccountStatements = AccountStatements.fromStatementLinesWithBalance(
+                eur1000,
+                List.of(
+                        new AccountStatementLineWithBalance(depositTimestamp.toLocalDate(), eur1000, null, eur1000)
+                ));
         assertThat(accountStatements).isEqualTo(expectedAccountStatements);
     }
 }
