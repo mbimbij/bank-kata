@@ -1,6 +1,7 @@
 package org.example.banking.domain.readmodel;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 import org.javamoney.moneta.Money;
 
@@ -10,6 +11,7 @@ import java.util.List;
 
 @EqualsAndHashCode
 @ToString
+@Getter
 public class AccountStatements {
     MonetaryAmount currentBalance = Money.of(0, "EUR");
     private final List<AccountStatementLineWithBalance> statementLinesWithBalance = new ArrayList<>();

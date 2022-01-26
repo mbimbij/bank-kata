@@ -28,6 +28,10 @@ public class ApplicationFacade {
         customerRepository.save(new Customer(customerId, customerName));
     }
 
+    public Customer getCustomerById(UUID customerId) {
+        return customerRepository.getById(customerId);
+    }
+
     public void createAccount(CreateAccountCommand command) {
         commandBus.send(command);
     }
