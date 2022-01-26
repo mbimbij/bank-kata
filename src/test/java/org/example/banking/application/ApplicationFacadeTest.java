@@ -62,24 +62,28 @@ public class ApplicationFacadeTest {
 
         ZonedDateTime depositTimestamp = creationTimestamp.plusDays(1);
         ZonedDateTime withdrawalTimestamp = creationTimestamp.plusDays(2);
-        ZonedDateTime transferTimestamp = creationTimestamp.plusDays(3);
+        ZonedDateTime transferTimestamp1 = creationTimestamp.plusDays(3);
+        ZonedDateTime transferTimestamp2 = creationTimestamp.plusDays(4);
 
         Money depostiAmount = Money.of(1000, "EUR");
         Money withdrawalAmount = Money.of(200, "EUR");
-        Money transferAmount = Money.of(300, "EUR");
+        Money transferAmount1 = Money.of(300, "EUR");
+        Money transferAmount2 = Money.of(100, "EUR");
 
         applicationFacade.deposit(new DepositMoneyCommand(accountId, depostiAmount, depositTimestamp));
         applicationFacade.withdraw(new WithdrawMoneyCommand(accountId, withdrawalAmount, withdrawalTimestamp));
-        applicationFacade.tranfer(new TransferMoneyCommand(accountId, otherAccountId, transferAmount, transferTimestamp));
+        applicationFacade.tranfer(new TransferMoneyCommand(accountId, otherAccountId, transferAmount1, transferTimestamp1));
+        applicationFacade.tranfer(new TransferMoneyCommand(otherAccountId, accountId, transferAmount2, transferTimestamp2));
 
         // WHEN
         AccountStatements accountStatements = applicationFacade.getAccountStatements(accountId);
 
         // THEN
         AccountStatements expectedAccountStatements = AccountStatements.fromStatementLinesWithBalance(
-                Money.of(500, "EUR"),
+                Money.of(600, "EUR"),
                 List.of(
-                        new AccountStatementLineWithBalance(transferTimestamp.toLocalDate(), null, transferAmount, Money.of(500, "EUR")),
+                        new AccountStatementLineWithBalance(transferTimestamp2.toLocalDate(), transferAmount2, null, Money.of(600, "EUR")),
+                        new AccountStatementLineWithBalance(transferTimestamp1.toLocalDate(), null, transferAmount1, Money.of(500, "EUR")),
                         new AccountStatementLineWithBalance(withdrawalTimestamp.toLocalDate(), null, withdrawalAmount, Money.of(800, "EUR")),
                         new AccountStatementLineWithBalance(depositTimestamp.toLocalDate(), depostiAmount, null, depostiAmount)
                 ));
